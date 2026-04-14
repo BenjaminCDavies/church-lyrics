@@ -8,7 +8,7 @@ export default function App() {
   const [selectedSong, setSelectedSong] = useState(null)
 
   if (loading) return <p>Loading...</p>
-  if (error) return <p>Something went wrong: {error.message}</p>
+  if (error) return <p>No setlists have been set</p>
 
   if (selectedSong) {
     return (
