@@ -29,13 +29,17 @@ export function useSetlist() {
         // Fetch the songs in that setlist, ordered by position
         const { data: setlistSongs, error: songsError } = await supabase
           .from('setlist_songs')
-          .select('position, songs(*)')
+          .select('position, songs(*, song_sections(*))')
           .eq('setlist_id', setlistData.id)
           .order('position', { ascending: true })
 
         if (songsError) throw songsError
 
-        setSongs(setlistSongs.map(s => s.songs))
+        setSongs(setlistSongs.map(s => ({
+          ...s.songs,
+          sections: (s.songs.song_selections || []).sort((a, b) => a.position - b.position)
+        })))
+
       } catch (err) {
         console.error('Error fetching setlist:', err)
         setError(err)

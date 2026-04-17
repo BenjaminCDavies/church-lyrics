@@ -41,9 +41,16 @@ export default function SongDetails({ song, onBack }) {
 
         {/* Lyrics Section */}
         <div style={styles.lyricsWrapper}>
-          <pre style={{ ...styles.lyrics, color: theme.text }}>
-            {song.lyrics}
-          </pre>
+          {song.sections?.map(section => (
+            <div key={section.id} style={styles.section}>
+              <p style={{ ...styles.sectionLabel, color: theme.secondary }}>
+                {section.label}
+              </p>
+              <pre style={{ ...styles.lyrics, color: theme.text }}>
+                {section.content}
+              </pre>
+            </div>
+          ))}
         </div>
       </main>
 
@@ -125,5 +132,15 @@ const styles = {
     textAlign: 'center',
     margin: 0,
     padding: '0 0.5rem',
+  },
+  section: { 
+    marginBottom: '2.5rem' 
+  },
+  sectionLabel: { 
+    fontSize: '0.8rem', 
+    fontWeight: '700', 
+    textTransform: 'uppercase', 
+    letterSpacing: '0.1em', 
+    marginBottom: '0.5rem' 
   }
 };

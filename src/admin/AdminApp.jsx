@@ -2,7 +2,7 @@ import { useState } from 'react'
 import AdminDashboard from './AdminDashboard'
 import './admin.css'
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD
 
 export default function AdminApp() {
   const [authed, setAuthed] = useState(false)

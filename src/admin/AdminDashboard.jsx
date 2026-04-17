@@ -15,7 +15,7 @@ export default function AdminDashboard({ onLogout }) {
       <aside className="admin-sidebar">
         <div className="admin-sidebar-header">
           <span className="admin-logo-icon">♪</span>
-          <span className="admin-sidebar-title">Lyrics Admin</span>
+          <span className="admin-sidebar-title">Admin</span>
         </div>
         <nav className="admin-nav">
           {NAV.map(n => (
