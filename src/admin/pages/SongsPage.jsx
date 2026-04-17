@@ -38,18 +38,24 @@ const EMPTY_SONG = { title: '', artist: '' }
 
 // ── Draggable Section Card ───────────────────────────────────────────────────
 
-function SectionCard({ section, index, total, onChange, onRemove, onMove, dragHandleProps }) {
+function SectionCard({ section, index, total, onChange, onRemove, onMove, onDuplicate, onDragStart, onDragOver, onDrop, isDragOver }) {
   const colors = TYPE_COLORS[section.type] || TYPE_COLORS.verse
   const [collapsed, setCollapsed] = useState(false)
 
   return (
     <div
+      draggable
+      onDragStart={() => onDragStart(section._key)}
+      onDragOver={e => { e.preventDefault(); onDragOver(section._key) }}
+      onDrop={e => { e.preventDefault(); onDrop(section._key) }}
+      onDragEnd={() => onDrop(null)}
       style={{
         background: '#fff',
         border: `1px solid #e8e7e3`,
         borderRadius: 10,
         overflow: 'hidden',
-        transition: 'box-shadow 0.15s',
+        transition: 'box-shadow 0.15s, opacity 0.15s',
+        boxShadow: isDragOver ? '0 -3px 0 0 #3498db' : 'none',
       }}
     >
       {/* Card header */}
@@ -67,7 +73,6 @@ function SectionCard({ section, index, total, onChange, onRemove, onMove, dragHa
       >
         {/* Drag handle */}
         <span
-          {...dragHandleProps}
           onClick={e => e.stopPropagation()}
           style={{
             cursor: 'grab',
@@ -138,6 +143,16 @@ function SectionCard({ section, index, total, onChange, onRemove, onMove, dragHa
             ↓
           </button>
         </div>
+
+        {/* Duplicate button */}
+        <button
+          className="btn-icon"
+          onClick={e => { e.stopPropagation(); onDuplicate(section._key) }}
+          title="Duplicate section"
+          style={{ width: 26, height: 26, fontSize: 12 }}
+        >
+          ⧉
+        </button>
 
         {/* Collapse chevron */}
         <span style={{ color: '#bbb', fontSize: 12, flexShrink: 0, transform: collapsed ? 'rotate(-90deg)' : 'none', transition: 'transform 0.15s' }}>
@@ -300,12 +315,14 @@ function StructurePreview({ sections }) {
 export default function SongsPage() {
   const [songs, setSongs] = useState([])
   const [loading, setLoading] = useState(true)
-  const [editing, setEditing] = useState(null)   // null | 'new' | song object
+  const [editing, setEditing] = useState(null)
   const [songForm, setSongForm] = useState(EMPTY_SONG)
   const [sections, setSections] = useState([])
   const [saving, setSaving] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(null)
   const [toast, setToast] = useState(null)
+  const [dragOverKey, setDragOverKey] = useState(null)
+  const dragSrcKey = useRef(null)
 
   useEffect(() => { fetchSongs() }, [])
 
@@ -332,7 +349,6 @@ export default function SongsPage() {
 
   async function openEdit(song) {
     setSongForm({ title: song.title, artist: song.artist || '' })
-    // Load existing sections
     const { data } = await supabase
       .from('song_sections')
       .select('*')
@@ -372,6 +388,48 @@ export default function SongsPage() {
     })
   }
 
+  function duplicateSection(key) {
+    setSections(prev => {
+      const idx = prev.findIndex(s => s._key === key)
+      if (idx === -1) return prev
+      const copy = {
+        ...prev[idx],
+        _key: crypto.randomUUID(),
+        label: prev[idx].label + ' (copy)',
+      }
+      const next = [...prev]
+      next.splice(idx + 1, 0, copy)
+      return next
+    })
+  }
+
+  function handleDragStart(key) {
+    dragSrcKey.current = key
+  }
+
+  function handleDragOver(key) {
+    if (dragSrcKey.current && dragSrcKey.current !== key) {
+      setDragOverKey(key)
+    }
+  }
+
+  function handleDrop(key) {
+    setDragOverKey(null)
+    if (!key || !dragSrcKey.current || dragSrcKey.current === key) {
+      dragSrcKey.current = null
+      return
+    }
+    setSections(prev => {
+      const srcIdx = prev.findIndex(s => s._key === dragSrcKey.current)
+      const tgtIdx = prev.findIndex(s => s._key === key)
+      const next = [...prev]
+      const [item] = next.splice(srcIdx, 1)
+      next.splice(tgtIdx, 0, item)
+      return next
+    })
+    dragSrcKey.current = null
+  }
+
   async function handleSave() {
     if (!songForm.title.trim()) return
     if (sections.length === 0) return
@@ -407,7 +465,6 @@ export default function SongsPage() {
       return
     }
 
-    // Replace all sections for this song
     await supabase.from('song_sections').delete().eq('song_id', songId)
     const { error: sectionsError } = await supabase.from('song_sections').insert(
       sections.map((s, i) => ({
@@ -532,7 +589,11 @@ export default function SongsPage() {
                 onChange={updateSection}
                 onRemove={removeSection}
                 onMove={moveSection}
-                dragHandleProps={{}}
+                onDuplicate={duplicateSection}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                isDragOver={dragOverKey === section._key}
               />
             ))}
           </div>
