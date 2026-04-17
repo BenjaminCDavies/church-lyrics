@@ -35,10 +35,16 @@ export function useSetlist() {
 
         if (songsError) throw songsError
 
-        setSongs(setlistSongs.map(s => ({
-          ...s.songs,
-          sections: (s.songs.song_selections || []).sort((a, b) => a.position - b.position)
-        })))
+        setSongs(
+          setlistSongs.map(s => {
+            const { song_sections, sections: _discard, ...songFields } = s.songs
+            return {
+              ...songFields,
+              sections: (song_sections || [])
+              .sort((a, b) => a.position - b.position),
+            }
+          })
+        )
 
       } catch (err) {
         console.error('Error fetching setlist:', err)
