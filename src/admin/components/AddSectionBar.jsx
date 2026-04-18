@@ -1,3 +1,5 @@
+import { SECTION_TYPES, TYPE_LABELS, TYPE_COLORS } from '../../shared/constants/sectionTypes'
+
 function AddSectionBar({ onAdd }) {
   return (
     <div

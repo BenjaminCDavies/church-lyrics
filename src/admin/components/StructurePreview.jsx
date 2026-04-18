@@ -1,3 +1,5 @@
+import { TYPE_LABELS, TYPE_COLORS } from '../../shared/constants/sectionTypes'
+
 function StructurePreview({ sections }) {
   if (!sections.length) return null
   return (

@@ -1,6 +1,6 @@
-const SECTION_TYPES = ['verse', 'chorus', 'bridge', 'pre-chorus', 'intro', 'outro', 'tag']
+export const SECTION_TYPES = ['verse', 'chorus', 'bridge', 'pre-chorus', 'intro', 'outro', 'tag']
 
-const TYPE_LABELS = {
+export const TYPE_LABELS = {
   verse: 'Verse',
   chorus: 'Chorus',
   bridge: 'Bridge',
@@ -10,7 +10,7 @@ const TYPE_LABELS = {
   tag: 'Tag',
 }
 
-const TYPE_COLORS = {
+export const TYPE_COLORS = {
   verse: { bg: '#f0f4ff', color: '#3a5bd9', border: '#c7d4f7' },
   chorus: { bg: '#fff0f5', color: '#c2185b', border: '#f7c7d8' },
   bridge: { bg: '#f3f0ff', color: '#6d3fc2', border: '#d8c7f7' },
