@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useSetlist } from './hooks/useSetlist'
-import SongList from './components/SongList'
-import SongDetails from './components/SongDetails'
+import { useSetlist } from './user/hooks/useSetlist'
+import SongList from './user/components/SongList'
+import SongDetails from './user/components/SongDetails'
 
 export default function App() {
   const { setlist, songs, loading, error } = useSetlist()
