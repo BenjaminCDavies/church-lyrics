@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function SongDetails({ song, onBack }) {
-  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark for church settings
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   if (!song) return null;
 
@@ -12,7 +12,7 @@ export default function SongDetails({ song, onBack }) {
     title: isDarkMode ? '#ffffff' : '#2d3436',
     secondary: isDarkMode ? '#b0b0b0' : '#636e72',
     buttonBg: isDarkMode ? '#2d2d2d' : '#f0f0f0',
-    accent: '#3498db' // Calming blue accent
+    accent: '#3498db'
   };
 
   return (
@@ -27,7 +27,7 @@ export default function SongDetails({ song, onBack }) {
           onClick={() => setIsDarkMode(!isDarkMode)} 
           style={{ ...styles.navButton, backgroundColor: theme.buttonBg, color: theme.text }}
         >
-          {isDarkMode ? '☀️ Light' : '🌙 Dark'}
+          {isDarkMode ? 'Light' : 'Dark'}
         </button>
       </header>
 

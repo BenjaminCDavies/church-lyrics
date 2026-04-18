@@ -17,7 +17,7 @@ describe('SongCard', () => {
 
   it('calls onClick with the song when clicked', async () => {
     const user = userEvent.setup()
-    const handleClick = vi.fn()  // vi.fn() is Vitest's mock function (like jest.fn())
+    const handleClick = vi.fn()
 
     render(<SongCard song={mockSong} index={0} onClick={handleClick} />)
     await user.click(screen.getByText('Amazing Grace'))
