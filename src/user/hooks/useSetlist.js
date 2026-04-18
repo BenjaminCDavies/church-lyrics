@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../../supabaseClient'
+import { supabase } from '../../shared/lib/supabaseClient'
 
 export function useSetlist() {
   const [setlist, setSetlist] = useState(null)
