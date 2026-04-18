@@ -1,7 +1,7 @@
 import { SECTION_TYPES, TYPE_LABELS, TYPE_COLORS } from '../../shared/constants/sectionTypes'
 import { useState } from 'react'
 
-function SectionCard({ section, index, total, onChange, onRemove, onMove, onDuplicate, onDragStart, onDragOver, onDrop, isDragOver }) {
+export default function SectionCard({ section, index, total, onChange, onRemove, onMove, onDuplicate, onDragStart, onDragOver, onDrop, isDragOver }) {
   const colors = TYPE_COLORS[section.type] || TYPE_COLORS.verse
   const [collapsed, setCollapsed] = useState(false)
 

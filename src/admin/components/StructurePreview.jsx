@@ -1,6 +1,6 @@
 import { TYPE_LABELS, TYPE_COLORS } from '../../shared/constants/sectionTypes'
 
-function StructurePreview({ sections }) {
+export default function StructurePreview({ sections }) {
   if (!sections.length) return null
   return (
     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
