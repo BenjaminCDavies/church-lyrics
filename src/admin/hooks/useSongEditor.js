@@ -1,9 +1,5 @@
 import { useState, useRef } from 'react'
-
-const TYPE_LABELS = {
-  verse: 'Verse', chorus: 'Chorus', bridge: 'Bridge',
-  'pre-chorus': 'Pre-Chorus', intro: 'Intro', outro: 'Outro', tag: 'Tag',
-}
+import { TYPE_LABELS } from '../../shared/constants/sectionTypes'
 
 function makeSection(position = 1, type = 'verse') {
   return {
